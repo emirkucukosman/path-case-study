@@ -199,4 +199,4 @@ const initialize = () => {
 };
 
 initialize();
-// fetchGames();
+fetchGames();
