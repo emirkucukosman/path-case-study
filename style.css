@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  @apply bg-slate-50;
+}
+
+header {
+  @apply flex items-center justify-end py-8 px-16;
+}
+
+#cart-button {
+  @apply flex items-center gap-2 text-xs rounded-md p-2 transition-all duration-150 hover:bg-slate-200;
+}
+
+#cart-badge {
+  @apply bg-red-500 text-white font-bold px-2 py-1 rounded-full;
+}
+
+.loader {
+  @apply hidden items-center justify-center w-full h-screen backdrop-brightness-75;
+}
+
+.main {
+  @apply px-16 py-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+}
+
+.game-card {
+  @apply flex flex-col gap-4 shadow-md rounded-md p-4 bg-white;
+}
+
+.game-card-img-container {
+  @apply flex flex-col justify-center items-center;
+}
+
+.game-card-img {
+  @apply h-32 w-auto;
+}
+
+.game-card-title {
+  @apply text-left text-xl;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  display: -webkit-box;
+}
+
+.game-card-footer {
+  @apply flex flex-wrap items-center justify-between;
+}
+
+.game-card-pricing {
+  @apply flex items-center gap-2 font-semibold;
+}
+
+.game-card-sale-price {
+  @apply text-lg font-semibold;
+}
+
+.game-card-compare-price {
+  @apply text-sm text-red-500 line-through;
+}
+
+.game-card-add-to-cart {
+  @apply text-xs bg-green-500 text-white rounded-md shadow-md transition-all duration-150 px-4 py-2 hover:bg-green-600;
+}
+
+#cart {
+  @apply fixed hidden items-center justify-center top-0 left-0 w-full h-full z-50 backdrop-brightness-75;
+}
+
+#cart-modal {
+  animation: slideIn 0.3s ease-in-out;
+}
+
+#cart-modal,
+#cart-content {
+  @apply flex flex-col bg-white gap-4 rounded-md p-4;
+}
+
+.cart-item {
+  @apply flex items-center justify-between p-2 rounded-md gap-2 hover:bg-slate-200;
+}
+
+.cart-item-details {
+  @apply flex items-center gap-2;
+}
+
+.cart-item-img {
+  @apply w-12 h-12 rounded-md;
+}
+
+.cart-item-price {
+  @apply text-lg font-semibold ml-2;
+}
+
+.cart-close {
+  @apply flex justify-end;
+}
+
+.cart-close-button {
+  @apply cursor-pointer text-xs bg-red-500 text-white rounded-full shadow-md transition-all duration-150 px-2 py-1 hover:bg-red-600;
+}
+
+@keyframes slideIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
