@@ -25,6 +25,8 @@ const appendGames = async (games) => {
     gameCard.classList.add("game-card");
     gameCard.classList.add("data-index-" + i);
     gameCard.id = `game-card-${game.gameID}`;
+
+    // Send GA event on game card click
     gameCard.onclick = () => {
       gtag("event", "product_click");
     };
@@ -184,7 +186,7 @@ const initialize = () => {
     showFavourites();
   });
 
-  // add listener for 75 percent scroll
+  // Send GA event on 75 percent scroll
   window.addEventListener("scroll", () => {
     if (window.scrollY > window.innerHeight * 0.75) {
       gtag("event", "scroll_75_percent");
