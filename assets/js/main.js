@@ -6,6 +6,11 @@ let lastGameCardIndex = 10;
 let observer;
 
 const appendGames = async (games) => {
+  // Get favourites from local storage
+  const favourites = localStorage.getItem("favourites")
+    ? JSON.parse(localStorage.getItem("favourites"))
+    : [];
+
   games.forEach(async (game, i) => {
     // Get game details from API
     const gameInfo = await fetch(
@@ -20,6 +25,11 @@ const appendGames = async (games) => {
     gameCard.classList.add("game-card");
     gameCard.classList.add("data-index-" + i);
     gameCard.id = `game-card-${game.gameID}`;
+    gameCard.onclick = () => {
+      window.dataLayer.push({
+        event: "Product Click",
+      });
+    };
 
     // Create game card image container
     const gameCardImageContainer = document.createElement("div");
@@ -54,6 +64,29 @@ const appendGames = async (games) => {
     gameCardComparePrice.classList.add("game-card-compare-price");
     gameCardComparePrice.innerText = `$${gameData.gameInfo.retailPrice}`;
 
+    // Create game card actions container
+    const gameCardActionsContainer = document.createElement("div");
+    gameCardActionsContainer.classList.add("game-card-actions-container");
+
+    //  Check if game is in favourites
+    const isFavourite = favourites.find((favourite) => favourite.gameID === game.gameID);
+
+    // Create game card favorite button
+    const gameCardFavoriteButton = document.createElement("button");
+    gameCardFavoriteButton.classList.add("game-card-favorite-button");
+    gameCardFavoriteButton.insertAdjacentHTML(
+      "afterbegin",
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${
+        isFavourite ? "#ff0000" : "#fff"
+      }" stroke="#000" class="w-6 h-6">
+        <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+      </svg>    
+      `
+    );
+    gameCardFavoriteButton.addEventListener("click", () => {
+      addToFavourites(game);
+    });
+
     // Create game card add to cart button
     const gameCardAddToCart = document.createElement("button");
     gameCardAddToCart.classList.add("game-card-add-to-cart");
@@ -62,12 +95,15 @@ const appendGames = async (games) => {
       addToCart(game);
     });
 
+    gameCardActionsContainer.appendChild(gameCardAddToCart);
+    gameCardActionsContainer.appendChild(gameCardFavoriteButton);
+
     // Append game card elements to game card
     gameCardImageContainer.appendChild(gameCardImage);
     gameCard.appendChild(gameCardImageContainer);
     gameCard.appendChild(gameCardTitle);
     gameCardFooter.appendChild(gameCardPricing);
-    gameCardFooter.appendChild(gameCardAddToCart);
+    gameCardFooter.appendChild(gameCardActionsContainer);
     gameCardPricing.appendChild(gameCardSalePrice);
     gameCardPricing.appendChild(gameCardComparePrice);
     gameCard.appendChild(gameCardFooter);
@@ -98,67 +134,6 @@ const appendGames = async (games) => {
   });
 };
 
-const addToCart = (game) => {
-  // save to local storage
-  const cart = localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")) : [];
-
-  // Add game to cart
-  cart.push(game);
-
-  // Update cart badge
-  document.getElementById("cart-badge").innerText = cart.length;
-
-  // Save cart to local storage
-  localStorage.setItem("cart", JSON.stringify(cart));
-};
-
-const showCart = () => {
-  // Get cart from local storage
-  const cart = localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")) : [];
-
-  cart.forEach((item) => {
-    const cartItem = document.createElement("div");
-    cartItem.classList.add("cart-item");
-
-    const cartItemDetails = document.createElement("div");
-    cartItemDetails.classList.add("cart-item-details");
-
-    const cartItemImage = document.createElement("img");
-    cartItemImage.classList.add("cart-item-img");
-    cartItemImage.src = item.thumb;
-    cartItemImage.alt = item.internalName;
-
-    const cartItemTitle = document.createElement("span");
-    cartItemTitle.classList.add("cart-item-title");
-    cartItemTitle.innerText = item.external;
-
-    const cartItemPrice = document.createElement("span");
-    cartItemPrice.classList.add("cart-item-price");
-    cartItemPrice.innerText = `$${item.cheapest}`;
-
-    cartItemDetails.appendChild(cartItemImage);
-    cartItemDetails.appendChild(cartItemTitle);
-
-    cartItem.appendChild(cartItemDetails);
-    cartItem.appendChild(cartItemPrice);
-
-    // Append cart to main DOM
-    document.getElementById("cart-content").appendChild(cartItem);
-  });
-
-  if (cart.length === 0) {
-    document.getElementById("cart-content").innerHTML = `<p>Your cart is empty</p>`;
-  }
-
-  // Create cart container
-  document.getElementById("cart").style.display = "flex";
-};
-
-const closeCart = () => {
-  document.getElementById("cart").style.display = "none";
-  document.getElementById("cart-content").innerHTML = "";
-};
-
 const fetchGames = async () => {
   try {
     // Show loader
@@ -186,15 +161,27 @@ const initialize = () => {
   // Get cart from local storage
   const cart = localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")) : [];
 
+  // Get favourites from local storage
+  const favourites = localStorage.getItem("favourites")
+    ? JSON.parse(localStorage.getItem("favourites"))
+    : [];
+
   // Update cart badge
   document.getElementById("cart-badge").innerText = cart.length;
+  document.getElementById("favourites-badge").innerText = favourites.length;
 
   document.getElementById("cart").addEventListener("click", () => {
     closeCart();
   });
+  document.getElementById("favourites").addEventListener("click", () => {
+    closeFavourites();
+  });
 
   document.getElementById("cart-button").addEventListener("click", () => {
     showCart();
+  });
+  document.getElementById("favourites-button").addEventListener("click", () => {
+    showFavourites();
   });
 };
 

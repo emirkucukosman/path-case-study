@@ -11,11 +11,13 @@ header {
   @apply flex items-center justify-end py-8 px-16;
 }
 
-#cart-button {
+#cart-button,
+#favourites-button {
   @apply flex items-center gap-2 text-xs rounded-md p-2 transition-all duration-150 hover:bg-slate-200;
 }
 
-#cart-badge {
+#cart-badge,
+#favourites-badge {
   @apply bg-red-500 text-white font-bold px-2 py-1 rounded-full;
 }
 
@@ -28,7 +30,7 @@ header {
 }
 
 .game-card {
-  @apply flex flex-col gap-4 shadow-md rounded-md p-4 bg-white;
+  @apply flex flex-col gap-4 shadow-sm rounded-md p-4 bg-white;
 }
 
 .game-card-img-container {
@@ -45,6 +47,10 @@ header {
   -webkit-box-orient: vertical;
   overflow: hidden;
   display: -webkit-box;
+}
+
+.game-card-actions-container {
+  @apply flex items-center gap-2;
 }
 
 .game-card-footer {
@@ -64,43 +70,72 @@ header {
 }
 
 .game-card-add-to-cart {
-  @apply text-xs bg-green-500 text-white rounded-md shadow-md transition-all duration-150 px-4 py-2 hover:bg-green-600;
+  @apply text-xs bg-indigo-500 text-white rounded-md shadow-sm transition-all duration-150 px-4 py-2 hover:bg-indigo-600;
 }
 
-#cart {
+.game-card-favorite-button {
+  @apply rounded-md shadow-sm p-1 border-2 border-slate-100 transition-all duration-150;
+}
+
+.game-card-favorite-button svg {
+  @apply transition-all duration-150;
+}
+
+#cart,
+#favourites {
   @apply fixed hidden items-center justify-center top-0 left-0 w-full h-full z-50 backdrop-brightness-75;
 }
 
-#cart-modal {
+#cart-modal,
+#favourites-modal {
+  @apply border-2 shadow-md border-gray-300;
   animation: slideIn 0.3s ease-in-out;
 }
 
 #cart-modal,
-#cart-content {
-  @apply flex flex-col bg-white gap-4 rounded-md p-4;
+#cart-content,
+#favourites-modal,
+#favourites-content {
+  @apply flex flex-col bg-white gap-4 rounded-md p-4 max-h-72 overflow-scroll;
 }
 
-.cart-item {
+.cart-item,
+.favourite-item {
   @apply flex items-center justify-between p-2 rounded-md gap-2 hover:bg-slate-200;
 }
 
-.cart-item-details {
+.cart-item-title-container,
+.favourite-item-title-container {
+  @apply flex flex-col items-start -mt-4;
+}
+
+.cart-item-remove-button,
+.favourite-item-remove-button {
+  @apply text-xs underline text-red-500;
+}
+
+.cart-item-details,
+.favourite-item-details {
   @apply flex items-center gap-2;
 }
 
-.cart-item-img {
+.cart-item-img,
+.favourite-item-img {
   @apply w-12 h-12 rounded-md;
 }
 
-.cart-item-price {
+.cart-item-price,
+.favourite-item-price {
   @apply text-lg font-semibold ml-2;
 }
 
-.cart-close {
+.cart-close,
+.favourites-close {
   @apply flex justify-end;
 }
 
-.cart-close-button {
+.cart-close-button,
+.favourites-close-button {
   @apply cursor-pointer text-xs bg-red-500 text-white rounded-full shadow-md transition-all duration-150 px-2 py-1 hover:bg-red-600;
 }
 
