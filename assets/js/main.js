@@ -26,9 +26,7 @@ const appendGames = async (games) => {
     gameCard.classList.add("data-index-" + i);
     gameCard.id = `game-card-${game.gameID}`;
     gameCard.onclick = () => {
-      window.dataLayer.push({
-        event: "Product Click",
-      });
+      gtag("event", "product_click");
     };
 
     // Create game card image container
@@ -173,6 +171,7 @@ const initialize = () => {
   document.getElementById("cart").addEventListener("click", () => {
     closeCart();
   });
+
   document.getElementById("favourites").addEventListener("click", () => {
     closeFavourites();
   });
@@ -180,8 +179,16 @@ const initialize = () => {
   document.getElementById("cart-button").addEventListener("click", () => {
     showCart();
   });
+
   document.getElementById("favourites-button").addEventListener("click", () => {
     showFavourites();
+  });
+
+  // add listener for 75 percent scroll
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > window.innerHeight * 0.75) {
+      gtag("event", "scroll_75_percent");
+    }
   });
 };
 
