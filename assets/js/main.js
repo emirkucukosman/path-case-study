@@ -93,6 +93,11 @@ const appendGames = async (games) => {
     gameCardAddToCart.innerText = "Add to Cart";
     gameCardAddToCart.addEventListener("click", () => {
       addToCart(game);
+
+      // Send conversion event to Google Ads
+      gtag("event", "conversion", {
+        send_to: "AW-962136914/EW1HCKroxNkDENKW5MoD",
+      });
     });
 
     gameCardActionsContainer.appendChild(gameCardAddToCart);
